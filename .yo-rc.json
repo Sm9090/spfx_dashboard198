@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.0",
+    "libraryName": "bamboo-tenant-manager",
+    "libraryId": "01f1ca12-d9fc-4f5e-afcf-baf428e66a6d",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "bamboo-tenant-manager",
+    "solutionShortDescription": "bamboo-tenant-manager description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

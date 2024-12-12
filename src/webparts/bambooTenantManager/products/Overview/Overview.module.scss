@@ -1,0 +1,66 @@
+@import "~office-ui-fabric-react/dist/sass/References.scss";
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img {
+  max-width: 250px;
+}
+
+.tilesContainer {
+  display: flex;
+  text-align: left;
+  justify-content: space-between;
+  // flex-wrap: wrap;
+  margin-bottom: 10px;
+  gap: 10px;
+  
+}
+
+.smallTileContainer0 {
+  gap: 10px;
+  display: flex;
+  width: 100%;
+}
+.smallTileContainer1 {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  width: 100%;
+}
+
+.listContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.list {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 45%;
+}
+.header {
+  background: #000;
+  padding: 10px;
+  span {
+    color: #fff;
+  }
+}
+.items {
+  margin-bottom: 10px;
+  border: 1px solid #000;
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
+.chartContainer {
+  display: "flex" ;justify-content: "space-between" ;gap: 15px;
+}

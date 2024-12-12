@@ -1,0 +1,16 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+
+.tileContainer {
+    margin-right: 5px;
+    padding: 10px;
+    box-shadow: 0px 48px 100px 0 rgb(17 12 46 / 15%);
+    background-color: rgb(31, 41, 55);
+    min-width: 125px;
+    border-radius: 6px;
+    width: 162px;
+    .value {
+      color: "[theme: themePrimary, default: #005a9e]";
+      font-size: 10px;
+    }
+  }

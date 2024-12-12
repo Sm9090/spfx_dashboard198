@@ -1,0 +1,44 @@
+@import "~office-ui-fabric-react/dist/sass/References.scss";
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.headerLogo {
+  width: 50px;
+  
+}
+
+.titleContainer {
+  margin-left: 10px;
+  flex-direction: column;
+  display: flex;
+}
+
+.container {
+  margin-top: 10px;
+}
+
+.input {
+  margin-top: 10px;
+}
+
+.submit {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.logoContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(97,97,97,0.6);
+  border-radius: 5px;
+  // border-color: "[theme: themePrimary, default: #005a9e]";
+  border-width: 2px;
+  border-style: solid;
+}

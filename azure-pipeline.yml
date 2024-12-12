@@ -1,0 +1,72 @@
+trigger:
+  branches:
+    include:
+    - master
+    - dev
+    - feature/*
+    - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:    
+    verbose: false    
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'TMSonarCloud'
+    organization: 'spxteam'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'spxteam_TenantManager'
+    cliProjectName: 'TenantManager'
+    cliSources: '.'
+    extraProperties: |
+      sonar.javascript.node.maxspace=4096
+
+- task: gulp@0
+  inputs:
+    gulpFile: './gulpfile.js'
+    targets: 'update-spfx-solution'
+    gulpjs: 'node_modules/gulp/bin/gulp.js'
+    enableCodeCoverage: false
+
+- task: gulp@0
+  inputs:
+    gulpFile: './gulpfile.js'
+    targets: 'bundle'
+    gulpjs: 'node_modules/gulp/bin/gulp.js'
+    enableCodeCoverage: false
+    arguments: --ship
+
+- task: gulp@0
+  inputs:
+    gulpFile: './gulpfile.js'
+    targets: 'package-solution'
+    gulpjs: 'node_modules/gulp/bin/gulp.js'
+    enableCodeCoverage: false
+    arguments: --ship
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    Contents: |
+      sharepoint/**/*.sppkg
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
