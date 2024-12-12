@@ -3,7 +3,7 @@ import { PRODUCTS } from "../contants/products";
 import {
   getAllProducts,
   getAppCatalogUrls,
-  getSiteAnalyticsData,
+  getStats,
   getStatsByMonth,
 } from "../service/tenant";
 import {
@@ -40,6 +40,7 @@ export type StoreContextType = {
   mostViewedProduct: MostViewedProps;
   productAnalytics: ProductAnalytics[]; // Add productAnalytics here
   setProductAnalytics: React.Dispatch<React.SetStateAction<ProductAnalytics[]>>
+  allStats: any[] ;
 };
 
 export const StoreContext = React.createContext<StoreContextType>({
@@ -60,7 +61,8 @@ export const StoreContext = React.createContext<StoreContextType>({
   isTenant: false,
   mostViewedProduct: { productName: "", views: { thisMonth: 0, lastMonth: 0 } },
   productAnalytics: [],
-  setProductAnalytics: () => {}
+  setProductAnalytics: () => {},
+  allStats: []
 });
 
 export const useStoreContext = () => React.useContext(StoreContext);
@@ -69,6 +71,7 @@ export default function StoreProvider(props) {
   const [tab, setTab] = React.useState("Overview");
   const [products, setProducts] = React.useState<SideBarItem[]>([]);
   const [selectedProduct, setSelectedProduct] = React.useState<SideBarItem>();
+  const [allStats , setAllStats] = React.useState<any[]>([])
   const [mostViewedProduct, setMostViewedProduct] =
     React.useState<MostViewedProps>({
       productName: "",
@@ -113,14 +116,6 @@ export default function StoreProvider(props) {
     }
   };
 
-  const getAnalyticsData = async () => {
-    try {
-      const response = await getSiteAnalyticsData(props.context);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getProductStatsByMonth = async (products) => {
     try {
@@ -132,8 +127,6 @@ export default function StoreProvider(props) {
         });
         return matches;
       });
-
-      console.log(filteredProducts, "filteredResponse");
       if (filteredProducts && filteredProducts.length > 0) {
         const { thisMonth, lastMonth, productAnalytics } =
           calculateProductAnalytics(filteredProducts);
@@ -152,13 +145,24 @@ export default function StoreProvider(props) {
       console.error("Error fetching product stats by month:", error);
     }
   };
+  const getAllStats = async () => {
+    try {
+      const response = await getStats(props.context)
+      const filtered = response.toReversed().slice(0 , 5)
+      console.log(response , "response")
+      console.log(filtered , "filtered")
+      setAllStats(filtered)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   React.useEffect(() => {
     if (appCatalogURL && !products.length) getProducts();
   }, [appCatalogURL, products]);
 
   React.useEffect(() => {
     getAppCatalogUrl();
-    getAnalyticsData();
+    getAllStats()
   }, []);
 
   const handleTabChange = (_tab) => {
@@ -197,7 +201,8 @@ export default function StoreProvider(props) {
         isTenant,
         mostViewedProduct,
         productAnalytics: productsAnalytics, 
-        setProductAnalytics: setProductsAnalytics
+        setProductAnalytics: setProductsAnalytics,
+        allStats
       }}
     >
       {props.children}

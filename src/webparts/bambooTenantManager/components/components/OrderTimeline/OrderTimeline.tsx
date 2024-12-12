@@ -42,7 +42,7 @@ const OrderTimeline: React.FC<IOrderTimelineProps> = ({
               <Text variant="medium" style={{ fontWeight: 600 }}>
                 {item.label}
               </Text>
-              <Text variant="small">{item.timestamp}</Text>
+              <Text variant="small" style={{marginLeft: 10 , color: DefaultPalette.green}}>{item.timestamp}</Text>
             </div>
           </div>
         ))}

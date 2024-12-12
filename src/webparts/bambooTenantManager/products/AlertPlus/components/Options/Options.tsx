@@ -56,8 +56,6 @@ const Options: React.FC<IOptionsProps> = (props) => {
     getItem();
   }, []);
 
-  console.log(accessToken, "accetoken");
-  console.log(baseURL, "baseURL");
   const handleSubmit = async () => {
     setLoading(true);
 

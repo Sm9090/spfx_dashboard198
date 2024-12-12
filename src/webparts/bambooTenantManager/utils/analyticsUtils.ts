@@ -83,7 +83,6 @@ export const eachProductAnalytics = (
   allProductNames.forEach((productName) => {
     const urls = Object.keys(lifetimeUrlViews[productName] || {}).map((url) => {
       const urlData = lifetimeUrlViews[productName][url];
-      console.log(urlData)
       return {
         siteUrl: url,
         thisMonth: (thisMonthUrlViews[productName] || {})[url]?.totalViews || 0,
@@ -190,7 +189,6 @@ const productAnalytics = eachProductAnalytics(
   lifetimeUrlViews,
 );
 
-console.log(productAnalytics ,"productAnalytics")
 return {
   thisMonth: {
     productViews: thisMonthViews,

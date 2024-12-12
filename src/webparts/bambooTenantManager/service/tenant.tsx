@@ -3,10 +3,9 @@ import { SPHttpClient, SPHttpClientResponse } from "@microsoft/sp-http";
 export const getAllProducts = async (context, isTenant, appCatalogURL) =>
   new Promise((resolve, reject) => {
     const collectionURL = isTenant
-    ? "tenantappcatalog"
-    : "sitecollectionappcatalog";
+      ? "tenantappcatalog"
+      : "sitecollectionappcatalog";
     const baseURL = `${appCatalogURL}/_api/web/tenantappcatalog/AvailableApps`;
-  console.log(baseURL)
     context.spHttpClient
       .get(baseURL, SPHttpClient.configurations.v1)
       .then((res) => res.json())
@@ -30,13 +29,12 @@ export const getAllProducts = async (context, isTenant, appCatalogURL) =>
       })
       .catch((err) => reject(err));
   });
-  // "error": {
-  //   "code": "-1, Microsoft.SharePoint.Client.ResourceNotFoundException",
-  //   "message": "Cannot find resource for the request SP.RequestContext.current/web/sitecollectionappcatalog/
+// "error": {
+//   "code": "-1, Microsoft.SharePoint.Client.ResourceNotFoundException",
+//   "message": "Cannot find resource for the request SP.RequestContext.current/web/sitecollectionappcatalog/
 export const getAppCatalogUrls = async (context: any) =>
   new Promise((resolve) => {
     const absoluteUrl = context.pageContext.site.absoluteUrl;
-    console.log(absoluteUrl)
     context.spHttpClient
       .get("/_api/SP_TenantSettings_Current", SPHttpClient.configurations.v1, {
         headers: [["accept", "application/json;odata.metadata=none"]],
@@ -45,7 +43,6 @@ export const getAppCatalogUrls = async (context: any) =>
         return res.json();
       })
       .then(async (res: any) => {
-        console.log(res)
         if (res.error) {
           resolve({ url: absoluteUrl, isTenant: false });
         } else {
@@ -55,7 +52,8 @@ export const getAppCatalogUrls = async (context: any) =>
             resolve({ url: absoluteUrl, isTenant: false });
           }
         }
-      }).catch((err) => console.log(err))
+      })
+      .catch((err) => console.log(err));
   });
 
 export const getSPListData = async (client: any, url: string): Promise<any> => {
@@ -111,56 +109,54 @@ export const editSPListItems = async (client: any, url: string, data: any) =>
   });
 
 
-  export const getSiteAnalyticsData = async (context: any) => {
-    console.log(context ,"context")
-    const encodedSiteName = encodeURIComponent("Communication Site");
-  const siteUrl = `${context.pageContext.site.absoluteUrl}/_api/site/usage`
-  // ac2d9145-c523-4690-8cec-522ea6fee1c7
-  console.log(siteUrl ,"siteUrl")
-  
-    return context.spHttpClient
-      .get(
-        `${siteUrl}`,
-        SPHttpClient.configurations.v1
-      )
-      .then((response: SPHttpClientResponse) => {
-        return response.json();
-      })
-      .then((json) => {
-        console.log(json, "json")
-        return json;
-      })
-      .catch((error) => {
-        console.error("Error fetching analytics data:", error);
-        return error.message;
-      });
-  };
-  
+export const getStatsByMonth = async (context: any): Promise<any> => {
+  try {
+    const listName = "Stats By Month";
+    const siteUrl = context.pageContext.site.absoluteUrl;
+    const apiUrl = `${siteUrl}/_api/web/lists/getbytitle('${listName}')/items`;
 
-  export const getStatsByMonth = async (context: any): Promise<any> => {
-    try {
-      const listName = "Stats By Month"; 
-      const siteUrl = context.pageContext.site.absoluteUrl;
-      const apiUrl = `${siteUrl}/_api/web/lists/getbytitle('${listName}')/items`;
-  
-      console.log(`Fetching data from: ${apiUrl}`);
-  
-      const response: SPHttpClientResponse = await context.spHttpClient.get(
-        apiUrl,
-        SPHttpClient.configurations.v1
+    const response: SPHttpClientResponse = await context.spHttpClient.get(
+      apiUrl,
+      SPHttpClient.configurations.v1
+    );
+
+    if (response.ok) {
+      // Parse and return the JSON response
+      const data = await response.json();
+      return data.value;
+    } else {
+      console.error(`Error fetching list: ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch 'Stats By Month': ${response.statusText}`
       );
-  
-      if (response.ok) {
-        // Parse and return the JSON response
-        const data = await response.json();
-        console.log("Stats By Month data:", data);
-        return data.value;
-      } else {
-        console.error(`Error fetching list: ${response.statusText}`);
-        throw new Error(`Failed to fetch 'Stats By Month': ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error("Error in getStatsByMonth:", error);
-      throw error;
     }
-  };
+  } catch (error) {
+    console.error("Error in getStatsByMonth:", error);
+    throw error;
+  }
+};
+
+export const getStats = async (context) => {
+  try {
+    const listName = "All Stats";
+    const siteUrl = context.pageContext.site.absoluteUrl;
+    const apiUrl = `${siteUrl}/_api/web/lists/getbytitle('${listName}')/items`;
+
+    const response: SPHttpClientResponse = await context.spHttpClient.get(
+      apiUrl,
+      SPHttpClient.configurations.v1
+    );
+    if (response.ok) {
+      const data = await response.json();
+      return data.value;
+    } else {
+      console.error(`Error fetching list: ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch ' All Stats': ${response.statusText}`
+      );
+    }
+  } catch (error) {
+    console.error("Error in getAllStats:", error);
+    throw error;
+  }
+};

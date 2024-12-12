@@ -31,7 +31,6 @@ export interface IDetailsListBasicExampleItem {
 
 const ProductGrid: React.FC<IProductProps> = (props) => {
   const { productAnalytics } = useStoreContext();
-  console.log(productAnalytics , "productAnalytics")
   const { totalViewThisMonth, totalViewLastMonth, totalLifetimeViews } =
     totalViews(productAnalytics);
   const [items] = React.useState<IDetailsListBasicExampleItem[]>(() => {
@@ -128,12 +127,9 @@ const ProductGrid: React.FC<IProductProps> = (props) => {
     e: React.MouseEvent,
     item: IDetailsListBasicExampleItem
   ) => {
-    // e.preventDefault();
-    console.log(item , 'item')
     setExpandedRowId((prevId) => (prevId === item.id ? null : item.id));
   };
-console.log(selectedProductDetails,"selectedProductDetails")
-console.log(expandedRowId ,"expandedRowID")
+
   return (
     <div>
       <div>
